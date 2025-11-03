@@ -1,6 +1,11 @@
 package com.example.springdemo;
 
-public class Course {
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+// --- Course Class ---
+class Course {
     private String courseName;
 
     public Course(String courseName) {
@@ -12,13 +17,11 @@ public class Course {
     }
 }
 
-
-package com.example.springdemo;
-
-public class Student {
+// --- Student Class ---
+class Student {
     private Course course;
 
-    // Constructor-based injection
+    // Constructor-based dependency injection
     public Student(Course course) {
         this.course = course;
     }
@@ -29,14 +32,9 @@ public class Student {
     }
 }
 
-
-package com.example.springdemo;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
+// --- Configuration Class ---
 @Configuration
-public class AppConfig {
+class AppConfig {
 
     @Bean
     public Course course() {
@@ -45,27 +43,23 @@ public class AppConfig {
 
     @Bean
     public Student student() {
-        // Injecting Course bean into Student bean
+        // Inject Course bean into Student bean
         return new Student(course());
     }
 }
 
-
-package com.example.springdemo;
-
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
+// --- Main Class ---
 public class MainApp {
     public static void main(String[] args) {
 
-        // Initialize the Spring container with Java-based configuration
+        // Initialize Spring context using Java configuration
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(AppConfig.class);
 
         // Retrieve the Student bean
         Student student = context.getBean(Student.class);
 
-        // Call method to verify dependency injection
+        // Call method to test dependency injection
         student.showInfo();
 
         // Close context
